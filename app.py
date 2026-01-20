@@ -4,6 +4,10 @@ from pathlib import Path
 import google.generativeai as genai
 from datetime import datetime
 import os
+from dotenv import load_dotenv
+
+# Cargar variables de entorno desde .env
+load_dotenv()
 
 # Configuración de la página
 st.set_page_config(
@@ -309,7 +313,7 @@ def generate_evolution_with_ai(selected_text, api_key):
     try:
         # Configurar la API de Gemini
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('gemini-flash-latest')
         
         # Prompt optimizado para generar evoluciones fisioterapéuticas
         prompt = f"""Eres un fisioterapeuta profesional experto. 
