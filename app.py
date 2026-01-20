@@ -225,7 +225,11 @@ if 'chat_history' not in st.session_state:
 if 'current_evolution' not in st.session_state:
     st.session_state.current_evolution = ""
 if 'api_key' not in st.session_state:
-    st.session_state.api_key = os.getenv('GOOGLE_API_KEY', '')
+    # Intentar obtener de st.secrets (TOML) primero, luego de variables de entorno
+    try:
+        st.session_state.api_key = st.secrets["google"]["GOOGLE_API_KEY"]
+    except:
+        st.session_state.api_key = os.getenv('GOOGLE_API_KEY', '')
 
 # Función para cargar datos del CSV
 @st.cache_data
