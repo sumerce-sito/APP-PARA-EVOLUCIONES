@@ -1,0 +1,158 @@
+═══════════════════════════════════════════════════════════════════
+  🏥 FISIOAPP - GUÍA RÁPIDA DE INICIO
+═══════════════════════════════════════════════════════════════════
+
+📌 INICIO RÁPIDO (3 PASOS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣  INSTALAR DEPENDENCIAS
+   Abre PowerShell o CMD en esta carpeta y ejecuta:
+   
+   pip install -r requirements.txt
+
+2️⃣  CONFIGURAR API KEY DE GOOGLE AI
+   
+   a) Obtén tu API Key:
+      • Ve a: https://makersuite.google.com/app/apikey
+      • Inicia sesión con tu cuenta de Google
+      • Crea una nueva API key y cópiala
+   
+   b) Opción 1 - Archivo .env (RECOMENDADO):
+      • Copia el archivo .env.example a .env
+      • Abre .env y pega tu API key donde dice "tu_api_key_aqui"
+   
+   c) Opción 2 - Desde la aplicación:
+      • Puedes ingresar la API key directamente en el panel lateral
+        cuando ejecutes la aplicación
+
+3️⃣  EJECUTAR LA APLICACIÓN
+   
+   Opción A - Doble clic:
+      • Haz doble clic en start.bat
+   
+   Opción B - Comando:
+      streamlit run app.py
+
+
+═══════════════════════════════════════════════════════════════════
+  📖 CÓMO USAR LA APLICACIÓN
+═══════════════════════════════════════════════════════════════════
+
+PESTAÑA 1: SELECTOR DE TERAPIAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Navega por las categorías de intervenciones
+✓ Haz clic en las técnicas, ejercicios o modalidades aplicadas
+✓ Los items se añaden al panel derecho en orden de selección
+✓ Puedes eliminar items individualmente (❌) o limpiar todo
+✓ El texto se genera automáticamente en formato numerado
+
+PESTAÑA 2: GENERADOR DE EVOLUCIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Verifica las intervenciones seleccionadas
+✓ Haz clic en "🚀 Generar Evolución con IA"
+✓ La IA crea una nota profesional en segundos
+✓ Puedes copiar, descargar o regenerar la evolución
+✓ El historial se guarda automáticamente
+
+
+═══════════════════════════════════════════════════════════════════
+  ⚙️ CONFIGURACIÓN DEL PANEL LATERAL
+═══════════════════════════════════════════════════════════════════
+
+🔑 API KEY
+   • Ingresa tu Google AI API Key
+   • Haz clic en "Guardar API Key"
+   • Se mantiene durante toda la sesión
+
+📋 INFORMACIÓN
+   • Instrucciones rápidas de uso
+   • Siempre visible para referencia
+
+📊 ESTADÍSTICAS
+   • Items seleccionados actualmente
+   • Número de evoluciones generadas
+
+
+═══════════════════════════════════════════════════════════════════
+  🎯 FLUJO DE TRABAJO TÍPICO
+═══════════════════════════════════════════════════════════════════
+
+1. Abre la pestaña "Selector de Terapias"
+2. Selecciona el posicionamiento del paciente (Sedente, Bípedo, etc.)
+3. Añade el segmento corporal tratado (MMSS, MMII, Espalda, etc.)
+4. Agrega las modalidades aplicadas (calor, frío, TENS, etc.)
+5. Selecciona los ejercicios realizados
+6. Añade técnicas específicas (Codman, McKenzie, etc.)
+7. Incluye masoterapia si fue aplicada
+8. Ve a "Generador de Evolución"
+9. Haz clic en "Generar Evolución con IA"
+10. Copia o descarga la evolución generada
+11. ¡Listo! De 15 minutos a 2 minutos ✨
+
+
+═══════════════════════════════════════════════════════════════════
+  🛠️ SOLUCIÓN DE PROBLEMAS
+═══════════════════════════════════════════════════════════════════
+
+❌ "No se pudo cargar el CSV"
+   → Verifica que el archivo existe en la misma carpeta
+   → La app usará datos de respaldo automáticamente
+
+❌ "Error al generar la evolución"
+   → Verifica tu API Key de Google AI
+   → Verifica tu conexión a internet
+   → Asegúrate de que la API Key está activa
+
+❌ "ModuleNotFoundError"
+   → Ejecuta: pip install -r requirements.txt
+   → Asegúrate de tener Python 3.8 o superior
+
+❌ La aplicación no se abre
+   → Verifica que streamlit está instalado: pip install streamlit
+   → Prueba ejecutar directamente: streamlit run app.py
+
+
+═══════════════════════════════════════════════════════════════════
+  💡 CONSEJOS Y MEJORES PRÁCTICAS
+═══════════════════════════════════════════════════════════════════
+
+✨ ORDEN LÓGICO DE SELECCIÓN
+   1. Posicionamiento
+   2. Segmento corporal
+   3. Modalidades térmicas/eléctricas
+   4. Ejercicios y técnicas
+   5. Masoterapia
+
+✨ PERSONALIZACIÓN
+   • Puedes editar EJERCICIOS MODALIDADES EJERCICIOS.csv para añadir
+     nuevas intervenciones
+   • Formato: categoria;item
+   • No olvides separar con punto y coma (;)
+
+✨ SEGURIDAD
+   • NUNCA compartas tu API Key
+   • El archivo .env está en .gitignore (no se sube a Git)
+   • Los datos se procesan localmente
+
+✨ PRODUCTIVIDAD
+   • Crea selecciones comunes para casos frecuentes
+   • Guarda las evoluciones generadas para referencias futuras
+   • Usa el historial para revisar casos anteriores
+
+
+═══════════════════════════════════════════════════════════════════
+  📞 INFORMACIÓN DE CONTACTO
+═══════════════════════════════════════════════════════════════════
+
+Para soporte técnico o mejoras, contacta al administrador del sistema.
+
+Versión: 1.0
+Fecha: Enero 2026
+
+═══════════════════════════════════════════════════════════════════
+
+¡Gracias por usar FisioApp! 🏥✨
+Desarrollado para optimizar tu tiempo clínico y mejorar la calidad
+del registro fisioterapéutico.
+
+═══════════════════════════════════════════════════════════════════

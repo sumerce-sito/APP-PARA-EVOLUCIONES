@@ -1,0 +1,330 @@
+═══════════════════════════════════════════════════════════════════
+  🏥 FISIOAPP - INSTRUCCIONES DE PRIMER USO
+═══════════════════════════════════════════════════════════════════
+
+¡Bienvenido a FisioApp! Este documento te guiará en tu primer uso.
+
+═══════════════════════════════════════════════════════════════════
+  📋 ANTES DE COMENZAR
+═══════════════════════════════════════════════════════════════════
+
+VERIFICA QUE TIENES:
+✓ Python 3.8 o superior instalado
+✓ Conexión a internet (para instalar dependencias y usar IA)
+✓ Cuenta de Google (para obtener API Key)
+
+
+═══════════════════════════════════════════════════════════════════
+  🚀 INSTALACIÓN EN 4 PASOS
+═══════════════════════════════════════════════════════════════════
+
+PASO 1: ABRIR TERMINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Presiona Win + R
+2. Escribe: cmd
+3. Presiona Enter
+4. Navega a la carpeta del proyecto:
+   
+   cd "d:\CONSULTORIO\DOCUMENTOS IMPORTANTES\APP PARA EVOLUCIONES"
+
+
+PASO 2: INSTALAR DEPENDENCIAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ejecuta el siguiente comando:
+
+   pip install -r requirements.txt
+
+Espera a que termine la instalación (1-2 minutos).
+
+Deberías ver mensajes como:
+   ✓ Successfully installed streamlit-1.52.2
+   ✓ Successfully installed pandas-2.3.3
+   ✓ Successfully installed google-generativeai-0.8.6
+
+
+PASO 3: OBTENER API KEY DE GOOGLE AI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Abre tu navegador
+2. Ve a: https://makersuite.google.com/app/apikey
+3. Inicia sesión con tu cuenta de Google
+4. Haz clic en "Create API Key"
+5. Copia la API Key que se genera (empieza con "AIza...")
+
+IMPORTANTE: Guarda esta API Key en un lugar seguro. La necesitarás.
+
+
+PASO 4A: CONFIGURAR API KEY - OPCIÓN 1 (RECOMENDADO)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Busca el archivo: .env.example
+2. Crea una copia y renómbrala a: .env
+3. Abre .env con el Bloc de notas
+4. Reemplaza "tu_api_key_aqui" con tu API Key real:
+   
+   GOOGLE_API_KEY=AIzaSyD... (tu key completa)
+
+5. Guarda y cierra el archivo
+
+⚠️ NUNCA compartas el archivo .env con nadie
+
+
+PASO 4B: CONFIGURAR API KEY - OPCIÓN 2 (ALTERNATIVA)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Puedes configurar la API Key directamente desde la aplicación:
+
+1. Ejecuta la aplicación (ver PASO 5)
+2. En el panel lateral verás "API Key de Google AI"
+3. Pega tu API Key ahí
+4. Haz clic en "Guardar API Key"
+
+Nota: Esta configuración es temporal (dura solo mientras la app esté abierta)
+
+
+═══════════════════════════════════════════════════════════════════
+  ▶️ EJECUTAR LA APLICACIÓN
+═══════════════════════════════════════════════════════════════════
+
+OPCIÓN 1: DOBLE CLIC (MÁS FÁCIL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Busca el archivo: start.bat
+2. Haz doble clic
+3. Espera a que se abra tu navegador
+
+OPCIÓN 2: COMANDO (MANUAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Desde el terminal (CMD) en la carpeta del proyecto:
+
+   streamlit run app.py
+
+La aplicación se abrirá automáticamente en:
+   http://localhost:8501
+
+
+═══════════════════════════════════════════════════════════════════
+  🎮 TUTORIAL DE PRIMER USO
+═══════════════════════════════════════════════════════════════════
+
+EJEMPLO PRÁCTICO: Crear una evolución
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Imagina que trataste a un paciente con:
+- Dolor en hombro derecho
+- Aplicaste calor húmedo
+- Ejercicios con bandas elásticas
+- Masaje terapéutico
+
+PASO A PASO:
+
+1. CONFIGURAR (Primera vez solamente)
+   ───────────────────────────────────
+   a) Abre el panel lateral (clic en ">" si está cerrado)
+   b) Ve a "API Key de Google AI"
+   c) Pega tu API Key
+   d) Clic en "Guardar API Key"
+   e) Deberías ver: "✅ API Key guardada correctamente"
+
+2. SELECCIONAR INTERVENCIONES
+   ───────────────────────────────────
+   a) Ve a la pestaña "📝 Selector de Terapias"
+   
+   b) Expande "Posicionamiento"
+      → Clic en "Sedente"
+   
+   c) Expande "Segmento corporal"
+      → Clic en "Miembros superiores"
+   
+   d) Expande "Modalidades térmicas"
+      → Clic en "Calor húmedo"
+   
+   e) Expande "Modalidades mecánicas"
+      → Clic en "Bandas elásticas"
+   
+   f) Expande "Masoterapia e higiene postural"
+      → Clic en "Masaje manual relajante"
+
+   ✓ Verás los items aparecer en el panel derecho numerados
+
+3. REVISAR SELECCIÓN
+   ───────────────────────────────────
+   En el panel derecho verás:
+   
+   Tu Selección
+   ────────────
+   1. Sedente
+   2. Miembros superiores
+   3. Calor húmedo
+   4. Bandas elásticas
+   5. Masaje manual relajante
+   
+   [Copiar Texto] [Limpiar Todo]
+
+   Si necesitas eliminar alguno, haz clic en la ❌ roja
+
+4. GENERAR EVOLUCIÓN CON IA
+   ───────────────────────────────────
+   a) Cambia a la pestaña "🤖 Generador de Evolución"
+   
+   b) Verifica que aparece tu selección
+   
+   c) Haz clic en "🚀 Generar Evolución con IA"
+   
+   d) Espera 3-5 segundos
+   
+   e) ¡Listo! Verás la evolución generada:
+   
+      Ejemplo de resultado:
+      ════════════════════════════════════════════════
+      PACIENTE QUIEN ASISTE A SESIÓN DE FISIOTERAPIA
+      EN POSICIÓN SEDENTE SE REALIZAN INTERVENCIONES
+      EN MIEMBROS SUPERIORES CON APLICACIÓN DE CALOR
+      HÚMEDO PARA PREPARACIÓN TISULAR SEGUIDO DE
+      EJERCICIOS DE RESISTENCIA MUSCULAR CON BANDAS
+      ELÁSTICAS PARA FORTALECIMIENTO DE MUSCULATURA...
+      ════════════════════════════════════════════════
+
+5. USAR EL RESULTADO
+   ───────────────────────────────────
+   Tienes 3 opciones:
+   
+   [📋 Copiar Evolución]
+   → Copia para pegar en tu sistema de historia clínica
+   
+   [💾 Descargar como TXT]
+   → Guarda como archivo de texto
+   
+   [🔄 Nueva Evolución]
+   → Limpia para generar otra
+
+
+═══════════════════════════════════════════════════════════════════
+  💡 CONSEJOS PARA MEJORES RESULTADOS
+═══════════════════════════════════════════════════════════════════
+
+ORDEN LÓGICO RECOMENDADO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+1º → Posicionamiento (Sedente, Bípedo, Decúbito...)
+2º → Segmento corporal (MMSS, MMII, Espalda...)
+3º → Modalidades térmicas/eléctricas (Calor, TENS...)
+4º → Modalidades mecánicas (Equipos, ejercicios...)
+5º → Acondicionamiento y técnicas (Ejercicios específicos...)
+6º → Masoterapia (Si aplicaste masajes...)
+
+Este orden genera evoluciones más coherentes y profesionales.
+
+
+SÉ ESPECÍFICO:
+━━━━━━━━━━━━━━
+✓ Selecciona el posicionamiento usado
+✓ Indica el segmento corporal tratado
+✓ Incluye todas las modalidades aplicadas
+✓ No olvides los ejercicios realizados
+
+Cuanto más completa sea tu selección, mejor será la evolución generada.
+
+
+═══════════════════════════════════════════════════════════════════
+  ❓ PREGUNTAS FRECUENTES
+═══════════════════════════════════════════════════════════════════
+
+P: ¿Cuánto cuesta usar Google AI?
+R: ~$0.50 por mes con uso normal (10-15 evoluciones/día)
+   Las primeras consultas suelen ser gratis.
+
+P: ¿Los datos de mis pacientes se guardan en la nube?
+R: NO. Solo se envía a Google AI la lista de intervenciones
+   (sin nombres ni datos personales). La evolución se genera
+   localmente en tu computadora.
+
+P: ¿Puedo usar la app sin internet?
+R: Necesitas internet para:
+   - Instalar dependencias (primera vez)
+   - Generar evoluciones con IA
+   Puedes seleccionar intervenciones sin internet.
+
+P: ¿Puedo personalizar las intervenciones disponibles?
+R: SÍ. Edita el archivo:
+   EJERCICIOS MODALIDADES EJERCICIOS.csv
+   Formato: categoria;item
+
+P: ¿Puedo modificar cómo escribe la IA?
+R: SÍ. Si tienes conocimientos de Python, edita el
+   "prompt" en la función generate_evolution_with_ai()
+   del archivo app.py
+
+P: ¿La app funciona en Mac/Linux?
+R: SÍ. Solo start.bat es exclusivo de Windows.
+   En Mac/Linux usa: streamlit run app.py
+
+P: ¿Puedo acceder desde mi celular?
+R: Actualmente solo funciona en la computadora donde
+   está instalada. Para acceso remoto, considera
+   desplegar en Streamlit Cloud (gratis).
+
+
+═══════════════════════════════════════════════════════════════════
+  🔧 SOLUCIÓN RÁPIDA DE PROBLEMAS
+═══════════════════════════════════════════════════════════════════
+
+PROBLEMA: "No module named streamlit"
+SOLUCIÓN: pip install -r requirements.txt
+
+PROBLEMA: "Error al generar evolución"
+SOLUCIÓN: Verifica tu API Key en el panel lateral
+
+PROBLEMA: "CSV not found"
+SOLUCIÓN: La app usará datos de respaldo automáticamente.
+          Verifica que EJERCICIOS MODALIDADES EJERCICIOS.csv
+          esté en la misma carpeta que app.py
+
+PROBLEMA: El navegador no se abre
+SOLUCIÓN: Abre manualmente: http://localhost:8501
+
+PROBLEMA: "Port 8501 is already in use"
+SOLUCIÓN: Cierra otras ventanas de FisioApp o ejecuta:
+          streamlit run app.py --server.port 8502
+
+
+═══════════════════════════════════════════════════════════════════
+  📞 ¿NECESITAS AYUDA?
+═══════════════════════════════════════════════════════════════════
+
+1. Consulta README.md (documentación completa)
+2. Revisa GUIA_RAPIDA.txt (tips rápidos)
+3. Lee RESUMEN_PROYECTO.md (información técnica)
+4. Contacta al administrador del sistema
+
+
+═══════════════════════════════════════════════════════════════════
+  ✅ LISTA DE VERIFICACIÓN
+═══════════════════════════════════════════════════════════════════
+
+Antes de usar por primera vez, verifica que:
+
+□ Python está instalado (python --version)
+□ Dependencias instaladas (pip install -r requirements.txt)
+□ Tienes tu Google AI API Key
+□ API Key configurada (archivo .env o en la app)
+□ La app se ejecuta (streamlit run app.py)
+□ Puedes seleccionar intervenciones
+□ Puedes generar una evolución de prueba
+
+
+═══════════════════════════════════════════════════════════════════
+
+¡FELICIDADES! Ya estás listo para usar FisioApp 🎉
+
+Recuerda: De 15 minutos a 2 minutos por evolución.
+          ¡Aprovecha tu tiempo clínico!
+
+═══════════════════════════════════════════════════════════════════
+
+FisioApp v1.0 - Enero 2026
+Desarrollado para profesionales de la fisioterapia ❤️
+
+═══════════════════════════════════════════════════════════════════

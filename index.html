@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector de Ejercicios y Modalidades</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div id="app" class="flex flex-col lg:flex-row min-h-screen">
+
+        <main class="w-full lg:w-2/3 p-4 md:p-6 lg:p-8 overflow-y-auto">
+            <header class="mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Selector de Terapia</h1>
+                <p class="text-gray-600 mt-2">Haz clic en los elementos de las listas para agregarlos a tu selecci&oacute;n en el panel de la derecha.</p>
+            </header>
+
+            <div id="categories-container" class="space-y-8">
+                <!-- Categories will be rendered here by JavaScript -->
+            </div>
+        </main>
+
+        <aside class="w-full lg:w-1/3 bg-white border-l border-gray-200 flex flex-col sticky top-0 lg:h-screen">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-900">Tu Selecci&oacute;n</h2>
+                <p class="text-sm text-gray-500">Los elementos aparecen en el orden en que los seleccionas.</p>
+            </div>
+
+            <div id="selected-items-list" class="flex-grow p-6 overflow-y-auto custom-scrollbar">
+                <!-- Selected items will be rendered here -->
+                <p id="empty-selection-message" class="text-gray-500 text-center mt-8">A&uacute;n no has seleccionado nada.</p>
+            </div>
+
+            <div class="p-6 bg-gray-50 border-t border-gray-200 mt-auto">
+                <button id="copy-button" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                    Copiar Texto
+                </button>
+                <button id="clear-button" class="w-full mt-3 bg-red-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                    Limpiar Selecci&oacute;n
+                </button>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const DATA_CSV_PATH = 'EJERCICIOS MODALIDADES EJERCICIOS.csv';
+            const fallbackData = {
+                "Modalidades térmicas": ["Calor húmedo", "Parafina", "Paquete frío", "Baños con hielo", "Ultrasonido", "Contrastes: caliente - fría", "Hidroterapia platon Agua Caliente", "Hidroterapia platon Agua Fría", "Infrarrojo"],
+                "Modalidades mecánicas": ["Escalerilla de dedos", "Sistema de poleas", "Rueda náutica", "Bastón", "Balonterapia", "Rollo terapéutico", "Balancín de puyas", "Balancín de puyas mano", "Disco de madera", "Disco de giros", "Ejercitador de dedos (digiflex)", "Plastilina terapéutica", "Bandas elásticas", "Pesas", "Elíptica", "Bicicleta estática", "Sistema de pedales", "Balancín de madera", "Patín de madera", "Balancín de puyas pie", "Escalera de dos pasos", "Barras paralelas", "Caminadora"],
+                "Modalidades eléctricas": ["TENS", "EMS"],
+                "Acondicionamiento físico y técnicas": ["Isométricos", "Isotónicos", "Resistidos (autocarga)", "Cadena cinética abierta (CCA)", "Cadena cinética cerrada (CCC)", "Marcha (Descargas de peso)", "Balanceo", "Propiocepción", "Equilibrio", "Estiramientos musculares (flexibilidad)", "Técnica de Codman", "Técnica de McKenzie", "Técnica de Williams", "Técnica de Klapp", "Otra técnica"],
+                "Masoterapia e higiene postural": ["Higiene postural", "Masaje manual sedativo", "Masaje manual depletivo", "Masaje manual relajante", "Vibromasaje"],
+                "Posicionamiento": ["Sedente", "Sentado", "Bípedo", "Decúbito supino", "Decúbito prono", "Decúbito lateral derecho", "Decúbito lateral izquierdo", "Carga unipodal", "Cuadrúpedo"],
+                "Segmento corporal": ["Miembros superiores", "Miembros inferiores", "Espalda alta", "Espalda media", "Espalda baja"]
+            };
+
+            const categoriesContainer = document.getElementById('categories-container');
+            const selectedItemsList = document.getElementById('selected-items-list');
+            const emptySelectionMessage = document.getElementById('empty-selection-message');
+            const copyButton = document.getElementById('copy-button');
+            const clearButton = document.getElementById('clear-button');
+
+            let selectedItems = [];
+
+            const parseCsvToData = (csvText) => {
+                const lines = csvText.split('\n').map(line => line.trim()).filter(Boolean);
+                const data = {};
+                for (let i = 1; i < lines.length; i += 1) {
+                    const [category, item] = lines[i].split(';').map(part => part ? part.trim() : '');
+                    if (!category || !item) continue;
+                    if (!data[category]) data[category] = [];
+                    if (!data[category].includes(item)) data[category].push(item);
+                }
+                return Object.keys(data).length ? data : null;
+            };
+
+            const loadData = async () => {
+                try {
+                    const response = await fetch(DATA_CSV_PATH, { cache: 'no-store' });
+                    if (!response.ok) throw new Error('CSV not found');
+                    const csvText = await response.text();
+                    const parsed = parseCsvToData(csvText);
+                    return parsed || fallbackData;
+                } catch (error) {
+                    console.warn('Usando datos embebidos por error al leer el CSV:', error);
+                    return fallbackData;
+                }
+            };
+
+            const renderCategories = (data) => {
+                categoriesContainer.innerHTML = '';
+                for (const category in data) {
+                    const categoryEl = document.createElement('section');
+                    categoryEl.innerHTML = `
+                        <h3 class="text-xl font-semibold mb-4 pb-2 border-b border-gray-300">${category}</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${data[category].map(item => `
+                                <div class="item-button bg-white cursor-pointer p-2 px-4 border border-gray-300 rounded-full hover:bg-gray-100 hover:border-blue-500 transition-all duration-200 text-sm md:text-base" data-item="${item}">
+                                    ${item}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    categoriesContainer.appendChild(categoryEl);
+                }
+            };
+
+            const renderSelectedItems = () => {
+                selectedItemsList.innerHTML = '';
+                if (selectedItems.length === 0) {
+                    selectedItemsList.appendChild(emptySelectionMessage);
+                    emptySelectionMessage.style.display = 'block';
+                    copyButton.disabled = true;
+                    clearButton.disabled = true;
+                } else {
+                    emptySelectionMessage.style.display = 'none';
+                    selectedItems.forEach((item, index) => {
+                        const itemEl = document.createElement('div');
+                        itemEl.className = 'fade-in flex items-center justify-between bg-blue-50 p-3 rounded-lg mb-2 shadow-sm';
+                        itemEl.innerHTML = `
+                            <span class="font-medium text-blue-800">${index + 1}. ${item}</span>
+                            <button class="remove-item-btn text-red-500 hover:text-red-700 font-bold" data-index="${index}">×</button>
+                        `;
+                        selectedItemsList.appendChild(itemEl);
+                    });
+                    copyButton.disabled = false;
+                    clearButton.disabled = false;
+                }
+            };
+
+            categoriesContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('item-button')) {
+                    const itemName = e.target.dataset.item;
+                    selectedItems.push(itemName);
+                    renderSelectedItems();
+                }
+            });
+
+            selectedItemsList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-item-btn')) {
+                    const indexToRemove = parseInt(e.target.dataset.index, 10);
+                    selectedItems.splice(indexToRemove, 1);
+                    renderSelectedItems();
+                }
+            });
+
+            const copyWithFallback = (text) => {
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = text;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                const success = document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+                return success;
+            };
+
+            const setCopyFeedback = () => {
+                const originalText = copyButton.textContent;
+                copyButton.textContent = 'Copiado!';
+                copyButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                copyButton.classList.add('bg-green-500');
+                setTimeout(() => {
+                    copyButton.textContent = originalText;
+                    copyButton.classList.remove('bg-green-500');
+                    copyButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                }, 2000);
+            };
+
+            copyButton.addEventListener('click', async () => {
+                if (selectedItems.length === 0) return;
+
+                const textToCopy = selectedItems.map((item, index) => `${index + 1}. ${item}`).join('\n');
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(textToCopy);
+                    } else if (!copyWithFallback(textToCopy)) {
+                        throw new Error('Fallback copy failed');
+                    }
+                    setCopyFeedback();
+                } catch (err) {
+                    console.error('Error al copiar texto: ', err);
+                    alert('No se pudo copiar el texto. Por favor, hazlo manualmente.');
+                }
+            });
+
+            clearButton.addEventListener('click', () => {
+                selectedItems = [];
+                renderSelectedItems();
+            });
+
+            loadData().then((data) => {
+                renderCategories(data);
+                renderSelectedItems();
+            });
+        });
+    </script>
+</body>
+</html>
