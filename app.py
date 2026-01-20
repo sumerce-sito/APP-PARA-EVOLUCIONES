@@ -366,6 +366,15 @@ with st.sidebar:
     
     # API Key de Google AI
     st.markdown("### 🔑 API Key de Google AI")
+    
+    # Si la clave ya viene de secrets, mostrar mensaje de éxito
+    is_from_secrets = False
+    try:
+        if st.secrets["google"]["GOOGLE_API_KEY"] == st.session_state.api_key:
+            is_from_secrets = True
+    except:
+        pass
+
     api_key_input = st.text_input(
         "Ingresa tu API Key",
         value=st.session_state.api_key,
@@ -373,8 +382,12 @@ with st.sidebar:
         help="Obtén tu API key en https://makersuite.google.com/app/apikey"
     )
     
+    if is_from_secrets and api_key_input == st.session_state.api_key:
+        st.success("✅ Usando API Key de configuración segura")
+    
     if api_key_input != st.session_state.api_key:
         st.session_state.api_key = api_key_input
+        st.rerun()
     
     if st.button("💾 Guardar API Key", use_container_width=True):
         st.success("✅ API Key guardada correctamente")
