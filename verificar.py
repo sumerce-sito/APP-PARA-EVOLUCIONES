@@ -2,6 +2,15 @@
 Script de verificación para FisioApp
 Verifica que todas las dependencias estén instaladas correctamente
 """
+import sys
+import os
+from pathlib import Path
+
+if sys.platform == 'win32':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 print("="*60)
 print("  🏥 FISIOAPP - VERIFICACIÓN DEL SISTEMA")
@@ -9,7 +18,6 @@ print("="*60)
 print()
 
 # Verificar Python
-import sys
 print(f"✓ Python versión: {sys.version.split()[0]}")
 
 # Verificar dependencias
@@ -26,15 +34,16 @@ except ImportError as e:
     print(f"✗ Error con Pandas: {e}")
 
 try:
-    import google.generativeai as genai
-    print(f"✓ Google Generative AI: Instalado")
-except ImportError as e:
-    print(f"✗ Error con Google Generative AI: {e}")
+    from google import genai
+    print("✓ Google GenAI SDK (google-genai): Instalado")
+except ImportError:
+    try:
+        import google.generativeai as genai
+        print("✓ Google Generative AI (legacy): Instalado")
+    except ImportError as e:
+        print(f"✗ Error con Google GenAI SDK: {e}")
 
 # Verificar archivos necesarios
-import os
-from pathlib import Path
-
 print()
 print("Archivos del proyecto:")
 files_to_check = [
@@ -55,9 +64,16 @@ for file in files_to_check:
 print()
 if Path(".env").exists():
     print("✓ Archivo .env configurado")
-    print("  → Recuerda verificar que tu API Key esté correcta")
+    from dotenv import load_dotenv
+    load_dotenv()
+    key = os.getenv("GOOGLE_API_KEY", "")
+    if key and not key.startswith("tu_api_key"):
+        print(f"  → API Key detectada en .env: {key[:8]}...")
+    else:
+        print("  ⚠️ El archivo .env existe pero requiere una API Key válida")
+        print("  → Obtén tu clave en https://aistudio.google.com/")
 else:
-    print("⚠ Archivo .env NO encontrado")
+    print("⚠️ Archivo .env NO encontrado")
     print("  → Copia .env.example a .env y configura tu API Key")
     print("  → O ingresa la API Key desde el panel lateral de la app")
 
@@ -71,3 +87,4 @@ print("  streamlit run app.py")
 print()
 print("O haz doble clic en: start.bat")
 print()
+

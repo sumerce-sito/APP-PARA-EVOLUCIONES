@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 from pathlib import Path
-import google.generativeai as genai
 from datetime import datetime
 import os
 from dotenv import load_dotenv
@@ -313,14 +312,11 @@ def get_selected_text():
     return "\n".join([f"{i+1}. {item}" for i, item in enumerate(st.session_state.selected_items)])
 
 def generate_evolution_with_ai(selected_text, api_key):
-    """Genera la evolución fisioterapéutica usando Gemini AI"""
-    try:
-        # Configurar la API de Gemini
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-flash-latest')
-        
-        # Prompt optimizado para generar evoluciones fisioterapéuticas
-        prompt = f"""Eres un fisioterapeuta profesional experto. 
+    """Genera la evolución fisioterapéutica usando Google Gemini AI"""
+    if not api_key:
+        return "❌ No se ha proporcionado una API Key. Por favor ingresa tu API Key de Google AI en el panel lateral."
+
+    prompt = f"""Eres un fisioterapeuta profesional experto. 
 
 Basándote en las siguientes técnicas, ejercicios y modalidades aplicadas durante la sesión fisioterapéutica:
 
@@ -343,14 +339,39 @@ IMPORTANTE:
 - Mantén un tono profesional y objetivo
 - No uses formato de lista, debe ser un párrafo continuo
 """
-        
-        # Generar la respuesta
-        response = model.generate_content(prompt)
-        
-        return response.text
-        
+    try:
+        # Intentar primero con la nueva librería oficial `google.genai`
+        try:
+            from google import genai
+            client = genai.Client(api_key=api_key)
+            # Intentar con gemini-2.5-flash primero, luego fallback a gemini-1.5-flash
+            try:
+                response = client.models.generate_content(
+                    model='gemini-2.5-flash',
+                    contents=prompt
+                )
+            except Exception:
+                response = client.models.generate_content(
+                    model='gemini-1.5-flash',
+                    contents=prompt
+                )
+            return response.text
+        except ImportError:
+            # Fallback a la librería legacy `google.generativeai` si no está instalada la nueva
+            import google.generativeai as genai_legacy
+            genai_legacy.configure(api_key=api_key)
+            try:
+                model = genai_legacy.GenerativeModel('gemini-1.5-flash')
+            except Exception:
+                model = genai_legacy.GenerativeModel('gemini-pro')
+            response = model.generate_content(prompt)
+            return response.text
+            
     except Exception as e:
-        return f"❌ Error al generar la evolución: {str(e)}\n\nPor favor verifica tu API Key de Google AI."
+        err_msg = str(e)
+        if "API_KEY_INVALID" in err_msg or "API key not valid" in err_msg or "INVALID_ARGUMENT" in err_msg:
+            return "❌ **Error: API Key no válida.**\n\nLa API Key de Google AI que ingresaste no es correcta o ha sido desactivada.\nPor favor obtén una nueva API Key gratuita en [Google AI Studio](https://aistudio.google.com/app/apikey) e ingresala en la barra lateral."
+        return f"❌ Error al generar la evolución: {err_msg}\n\nPor favor verifica tu API Key de Google AI en https://aistudio.google.com/."
 
 # Header principal
 st.markdown("""
@@ -379,7 +400,7 @@ with st.sidebar:
         "Ingresa tu API Key",
         value=st.session_state.api_key,
         type="password",
-        help="Obtén tu API key en https://makersuite.google.com/app/apikey"
+        help="Obtén tu API key en https://aistudio.google.com/app/apikey"
     )
     
     if is_from_secrets and api_key_input == st.session_state.api_key:
@@ -487,11 +508,11 @@ with tab2:
     if not st.session_state.api_key:
         st.warning("⚠️ Por favor configura tu API Key de Google AI en el panel lateral para usar esta funcionalidad.")
         st.markdown("""
-        **Cómo obtener tu API Key:**
+        **Cómo obtener tu API Key gratuita:**
         
-        1. Visita [Google AI Studio](https://makersuite.google.com/app/apikey)
+        1. Visita [Google AI Studio](https://aistudio.google.com/app/apikey)
         2. Inicia sesión con tu cuenta de Google
-        3. Crea una nueva API key
+        3. Crea una nueva API key (es completamente gratuita)
         4. Copia la key y pégala en el campo de configuración del panel lateral
         """)
     else:
