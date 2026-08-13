@@ -339,39 +339,53 @@ IMPORTANTE:
 - Mantén un tono profesional y objetivo
 - No uses formato de lista, debe ser un párrafo continuo
 """
+    models_to_try = [
+        'gemini-2.5-flash',
+        'gemini-2.0-flash',
+        'gemini-1.5-flash-latest',
+        'gemini-1.5-flash',
+        'gemini-flash-latest',
+        'gemini-pro'
+    ]
+    
+    last_error = None
+    
+    # 1. Intentar con la librería moderna `google.genai`
     try:
-        # Intentar primero con la nueva librería oficial `google.genai`
-        try:
-            from google import genai
-            client = genai.Client(api_key=api_key)
-            # Intentar con gemini-2.5-flash primero, luego fallback a gemini-1.5-flash
+        from google import genai
+        client = genai.Client(api_key=api_key)
+        for m_name in models_to_try:
             try:
-                response = client.models.generate_content(
-                    model='gemini-2.5-flash',
-                    contents=prompt
-                )
-            except Exception:
-                response = client.models.generate_content(
-                    model='gemini-1.5-flash',
-                    contents=prompt
-                )
-            return response.text
-        except ImportError:
-            # Fallback a la librería legacy `google.generativeai` si no está instalada la nueva
-            import google.generativeai as genai_legacy
-            genai_legacy.configure(api_key=api_key)
+                res = client.models.generate_content(model=m_name, contents=prompt)
+                if res and res.text:
+                    return res.text
+            except Exception as e:
+                last_error = e
+                continue
+    except ImportError:
+        pass
+
+    # 2. Fallback a la librería legacy `google.generativeai`
+    try:
+        import google.generativeai as genai_legacy
+        genai_legacy.configure(api_key=api_key)
+        for m_name in models_to_try:
             try:
-                model = genai_legacy.GenerativeModel('gemini-1.5-flash')
-            except Exception:
-                model = genai_legacy.GenerativeModel('gemini-pro')
-            response = model.generate_content(prompt)
-            return response.text
-            
+                model = genai_legacy.GenerativeModel(m_name)
+                res = model.generate_content(prompt)
+                if res and res.text:
+                    return res.text
+            except Exception as e:
+                last_error = e
+                continue
     except Exception as e:
-        err_msg = str(e)
-        if "API_KEY_INVALID" in err_msg or "API key not valid" in err_msg or "INVALID_ARGUMENT" in err_msg:
-            return "❌ **Error: API Key no válida.**\n\nLa API Key de Google AI que ingresaste no es correcta o ha sido desactivada.\nPor favor obtén una nueva API Key gratuita en [Google AI Studio](https://aistudio.google.com/app/apikey) e ingresala en la barra lateral."
-        return f"❌ Error al generar la evolución: {err_msg}\n\nPor favor verifica tu API Key de Google AI en https://aistudio.google.com/."
+        last_error = e
+
+    err_msg = str(last_error) if last_error else "No se pudo conectar con los modelos de Gemini."
+    if "API_KEY_INVALID" in err_msg or "API key not valid" in err_msg or "INVALID_ARGUMENT" in err_msg:
+        return "❌ **Error: API Key no válida.**\n\nLa API Key de Google AI que ingresaste no es correcta o ha sido desactivada.\nPor favor obtén una nueva API Key gratuita en [Google AI Studio](https://aistudio.google.com/app/apikey) e ingrésala en el panel lateral."
+    
+    return f"❌ Error al generar la evolución: {err_msg}\n\nPor favor verifica tu API Key de Google AI en https://aistudio.google.com/."
 
 # Header principal
 st.markdown("""
